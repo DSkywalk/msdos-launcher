@@ -90,7 +90,7 @@ to customize your DOSBox behaviour for this game.
 Launch your game and in your game folder a **hash-config** file should appear.
 Now [Configure DOSBox](https://www.dosbox-staging.org/getting-started/introduction/) as you wish and you can remove `MSDOS_CREATE_CONFIG=1` from your LAUNCH OPTIONS.
 
-⚠️ Do not change the name of the **hash-config** file and if you change the game path your **hash-config** file _may_ change.
+⚠️ Do not change the name of the **hash-config** file and if in a while you change the game path your **hash-config** file name _may_ change too.
 
 ## Known issues
 
