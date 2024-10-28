@@ -1,8 +1,16 @@
 # MSDOS-Launcher
 
-A simple Steam Play compatibility tool to run any **Non-Steam** MSDOS software using native Linux DOSBox.
+A simple Steam Play compatibility tool to run any **Non-Steam** MSDOS games using native Linux DOSBox.
 
-This is a simple fork project of [Boxtron](https://github.com/dreamer/boxtron), a great option for official MSDOS Steam games.
+### 1. Add Non-Steam Game
+![Add Non-Steam Game](https://github.com/user-attachments/assets/88a8fa53-388f-4b52-ac41-bdba84aa96d3)
+
+### 2. Select DOSBox Launcher
+![imagen](https://github.com/user-attachments/assets/a7af85cc-53db-4e53-bb79-e4182ad4f123)
+
+![imagen](https://github.com/user-attachments/assets/1cb7ad2f-767b-4a4f-a1d0-4e75d243852a)
+
+_This is a simple fork project of [Boxtron](https://github.com/dreamer/boxtron), a great option for official MSDOS Steam games._
 
 
 ## Features
@@ -75,8 +83,13 @@ This installation method is explained in detail in [the packaging guide](PACKAGI
 ## Configuration
 
 As **LAUNCH OPTIONS** you can set `MSDOS_CREATE_CONFIG=1` to create an empty config file
-to customize your DOSBox for this game.
+to customize your DOSBox behaviour for this game.
 
+![Added launch option](https://github.com/user-attachments/assets/4be20502-5542-4773-9607-25cbfa6120b9)
+
+Launch your game and in your game folder a **hash-config** file (_0000abcdefg_exe_folder.conf_) should be created. Now [Configure DOSBox](https://www.dosbox-staging.org/getting-started/introduction/) as you wish and you can remove `MSDOS_CREATE_CONFIG=1` from your LAUNCH OPTIONS.
+
+⚠️ Do not change the name of the **hash-config** file and if you change the game path your **hash-config** file _may_ change.
 
 ## Known issues
 
