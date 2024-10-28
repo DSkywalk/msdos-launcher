@@ -1,0 +1,5 @@
+"manifest"
+{
+  "commandline" "/run-dosbox"
+  "commandline_waitforexitandrun" "/run-dosbox --wait-before-run"
+}

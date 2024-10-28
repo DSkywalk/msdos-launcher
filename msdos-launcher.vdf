@@ -1,0 +1,13 @@
+"compatibilitytools"
+{
+  "compat_tools"
+  {
+    "msdos-launcher" // Internal name of this tool
+    {
+      "install_path" "/usr/local/share/msdos-launcher"
+      "display_name" "DOSBox Launcher (native MSDOS)"
+      "from_oslist"  "windows"
+      "to_oslist"    "linux"
+    }
+  }
+}

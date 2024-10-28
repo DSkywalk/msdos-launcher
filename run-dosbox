@@ -1,0 +1,117 @@
+#!/usr/bin/python3
+
+# Copyright (C) 2019-2020  Patryk Obara <patryk.obara@gmail.com>
+# Copyright (C) 2024  D_Skywalk
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+import argparse
+import os
+import sys
+import subprocess
+import hashlib
+
+from pathlib import Path
+from typing import List
+
+import version
+import helpers
+from log import log, log_err, zenity_err, zenity_info
+from config import DOSBOX_BIN
+
+
+PID_FILE = '/tmp/msdos-launcher_%s.pid'
+
+
+def generate_game_name(path: Path) -> str:
+    md5 = hashlib.md5(path.as_posix().lower().encode())
+    digest = md5.hexdigest()[:8]
+    return f"0000{digest}_" + path.stem.lower() + "_" + path.parent.name.lower()
+
+
+def create_conf(conf_file: Path, cmd_line: List[str]) -> str:
+    create = next(filter(lambda x: "MSDOS_CREATE_CONFIG" in x, cmd_line), None)
+    if not create:
+        return cmd_line
+    
+    new_cmd = list(filter(lambda x: "MSDOS_CREATE_CONFIG" not in x, cmd_line ))
+    conf_file.touch()
+
+    return new_cmd
+
+
+def call_dosbox(args: List[str], name: str) -> int:
+    cmd = [DOSBOX_BIN]
+    log('working dir: "{}"'.format(os.getcwd()))
+
+    log(cmd + args)
+    sys.stderr.flush()
+    with helpers.PidFile(PID_FILE % name):
+        try:
+            ret_sys = subprocess.call(cmd + args)
+            return ret_sys
+        except FileNotFoundError as err:
+            log_err(err)
+
+
+def dosbox_runner(path_folder: Path, exe: str, cmd_line: List[str]) -> int:
+    gen_name = generate_game_name(path_folder / exe)
+    conf_list= []
+
+    conf_file = path_folder / (gen_name + ".conf")
+    if conf_file.exists():
+        conf_list += ['-conf', conf_file]
+    else:
+        cmd_line = create_conf(conf_file, cmd_line)
+
+    return call_dosbox(cmd_line + conf_list, gen_name)
+
+
+def run(cmd_line: List[str], wait: bool = False) -> None:
+    log('working dir: "{}"'.format(os.getcwd()))
+    log('original command:', cmd_line)
+
+    cmd_line = list(filter(lambda x: x != '^', cmd_line))
+
+    if wait:
+        helpers.wait_for_previous_process()
+
+    exe_path, exe = os.path.split(cmd_line[0]) if cmd_line else (None, '')
+
+    sys.exit(dosbox_runner(Path(exe_path), exe, cmd_line))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--wait-before-run', action='store_true')
+    group.add_argument('--version', action='store_true')
+    args, run_cmd_line = parser.parse_known_args()
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(0)
+
+    if args.version:
+        print('MSDOS Launcher version', version.VERSION)
+        sys.exit(0)
+
+    run(run_cmd_line, wait=args.wait_before_run)
+
+
+if __name__ == "__main__":
+    main()
