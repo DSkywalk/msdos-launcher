@@ -87,7 +87,8 @@ to customize your DOSBox behaviour for this game.
 
 ![Added launch option](https://github.com/user-attachments/assets/4be20502-5542-4773-9607-25cbfa6120b9)
 
-Launch your game and in your game folder a **hash-config** file (_0000abcdefg_exe_folder.conf_) should be created. Now [Configure DOSBox](https://www.dosbox-staging.org/getting-started/introduction/) as you wish and you can remove `MSDOS_CREATE_CONFIG=1` from your LAUNCH OPTIONS.
+Launch your game and in your game folder a **hash-config** file should appear.
+Now [Configure DOSBox](https://www.dosbox-staging.org/getting-started/introduction/) as you wish and you can remove `MSDOS_CREATE_CONFIG=1` from your LAUNCH OPTIONS.
 
 ⚠️ Do not change the name of the **hash-config** file and if you change the game path your **hash-config** file _may_ change.
 
